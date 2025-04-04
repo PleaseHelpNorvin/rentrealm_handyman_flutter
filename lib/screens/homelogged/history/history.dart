@@ -1,13 +1,13 @@
 import 'package:flutter/material.dart';
 
-class SettingScreen extends StatefulWidget {
-  const SettingScreen({super.key});
+class HistoryScreen extends StatefulWidget {
+  const HistoryScreen({super.key});
 
   @override
-  State<SettingScreen> createState() => SettingScreenState();
+  State<HistoryScreen> createState() => HistoryScreenState();
 }
 
-class SettingScreenState extends State<SettingScreen> {
+class HistoryScreenState extends State<HistoryScreen> {
   // Simulate logout action (e.g., clearing token, navigating to login screen)
   void _logout() {
     // For now, just show a snackbar (you could add actual logout logic here)

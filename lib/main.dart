@@ -2,8 +2,10 @@
 import 'dart:io';
 import 'package:provider/provider.dart';
 import 'package:flutter/material.dart';
+import 'package:rentrealm_handyman_flutter/providers/handy_man_provider.dart';
 
 import 'providers/auth_provider.dart';
+import 'providers/maintenance_request_provider.dart';
 import 'screens/auth/login.dart';
 import 'screens/get_started.dart';
 
@@ -33,6 +35,8 @@ class _MyAppState extends State<MyApp> {
     return MultiProvider (
       providers: [
         ChangeNotifierProvider(create: (_) => AuthProvider()),
+        ChangeNotifierProvider(create: (_) => HandyManProvider()),
+        ChangeNotifierProvider(create: (_) => MaintenanceRequestProvider()),
       ],
       child: Builder(
         builder: (context) {

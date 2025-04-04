@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:curved_navigation_bar/curved_navigation_bar.dart';
 import 'home/home.dart'; // Import your HomeScreen
-import 'settings/settings.dart'; // Import your SettingScreen
+import 'history/history.dart'; // Import your SettingScreen
 
 class Homelogged extends StatefulWidget {
   final String token;
@@ -21,15 +21,21 @@ class _HomeloggedState extends State<Homelogged> {
   // List of pages for bottom navigation
   final List<Widget> _screens = [
     const HomeScreen(),  // Home screen
-    const SettingScreen(),
+    const HistoryScreen(),
     // Add other screens here if needed
   ];
 
   // List of titles for each screen
   final List<String> _titles = [
     'Home',    // Title for HomeScreen
-    'Settings', // Title for SettingScreen
+    'History', // Title for SettingScreen
   ];
+
+  void _logout() {
+    print("Icon tapped!");
+    // You can perform any action when the icon is tapped, like navigating to another screen
+    // Example: Navigator.pushNamed(context, '/anotherScreen');
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -37,6 +43,15 @@ class _HomeloggedState extends State<Homelogged> {
       appBar: AppBar(
         automaticallyImplyLeading: false,
         title: Text(_titles[_currentIndex]), // Dynamic title based on current screen
+         actions: [
+          // Tappable IconButton in the AppBar
+          IconButton(
+            icon: Icon(Icons.logout), // You can replace with any icon you prefer
+            onPressed: () {
+              _logout();
+            }, // Call the function when the icon is tapped
+          ),
+        ],
       ),
       body: _screens[_currentIndex], // Display the screen based on current index
       backgroundColor: const Color(0xFFF6F7FD),
@@ -45,7 +60,7 @@ class _HomeloggedState extends State<Homelogged> {
         backgroundColor: Colors.transparent,
         items: const <Widget>[
           Icon(Icons.home, size: 30, color: Colors.white), // Home icon
-          Icon(Icons.settings, size: 30, color: Colors.white), // Settings icon
+          Icon(Icons.history, size: 30, color: Colors.white), // Settings icon
         ],
         index: _currentIndex,
         onTap: (index) {

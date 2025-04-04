@@ -146,29 +146,29 @@ class _LoginScreenState extends State<LoginScreen> {
               SizedBox(height: 20), // Add extra space to avoid overlap
 
               // Option to sign up
-              Row(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  Text(
-                    "Don't have an account? ",
-                    style: TextStyle(fontSize: 16),
-                  ),
-                  GestureDetector(
-                    onTap: () {
-                      // Navigate to Sign Up screen
-                      Navigator.pushNamed(context, '/signup');
-                    },
-                    child: Text(
-                      'Sign Up',
-                      style: TextStyle(
-                        color: Colors.blue,
-                        fontWeight: FontWeight.bold,
-                        fontSize: 16,
-                      ),
-                    ),
-                  ),
-                ],
-              ),
+              // Row(
+              //   mainAxisAlignment: MainAxisAlignment.center,
+              //   children: [
+              //     Text(
+              //       "Don't have an account? ",
+              //       style: TextStyle(fontSize: 16),
+              //     ),
+              //     GestureDetector(
+              //       onTap: () {
+              //         // Navigate to Sign Up screen
+              //         Navigator.pushNamed(context, '/signup');
+              //       },
+              //       child: Text(
+              //         'Sign Up',
+              //         style: TextStyle(
+              //           color: Colors.blue,
+              //           fontWeight: FontWeight.bold,
+              //           fontSize: 16,
+              //         ),
+              //       ),
+              //     ),
+              //   ],
+              // ),
               SizedBox(height: 30),  // Add space at the bottom
             ],
           ),
