@@ -101,7 +101,9 @@ class MaintenanceRequest {
       tenantId: json['tenant_id'] != null ? json['tenant_id'] as int? : null,
       roomId: json['room_id'] != null ? json['room_id'] as int? : null,
       handymanId:
-          json['handyman_id'] != null ? json['handyman_id'] as int? : null,
+          json['handyman_id'] != null
+              ? int.tryParse(json['handyman_id'].toString())
+              : null,
       assignedBy:
           json['assigned_by'] != null
               ? User.fromJson(json['assigned_by'])

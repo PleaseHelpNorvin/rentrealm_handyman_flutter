@@ -28,6 +28,18 @@ class MaintenanceRequestProvider extends ChangeNotifier {
         .toList();
   }
 
+  List<MaintenanceRequest?> get requestedRequests {
+    return _maintenanceRequestList
+        .where((request) => request?.status == 'requested')
+        .toList();
+  }
+
+  List<MaintenanceRequest?> get assignedRequests {
+    return _maintenanceRequestList
+        .where((request) => request?.status == 'assigned')
+        .toList();
+  }
+
   // Tenant? _tenant;
   // Tenant? get tenant => _tenant;
 
@@ -93,14 +105,27 @@ class MaintenanceRequestProvider extends ChangeNotifier {
       "from acceptMaintenanceRequest().maintenenceRequestId: $maintenanceRequestId",
     );
     print("from acceptMaintenanceRequest().handymanId: $handymanId");
-    if (token == null || userId == null) {
+    if (token == null || userId == null || handymanId == null) {
       print("no token detected at fetchHandyMan");
       return;
     }
 
-    try {} catch (e) {
+    try {
+      final response = await apiService.patchMaintenanceRequestToStatusRequest(
+        token: token,
+        maintenanceRequestId: maintenanceRequestId,
+        handymanId: handymanId,
+      );
+
+      if (response != null && response.success) {
+        await fetchMaintenanceRequest(context);
+        Navigator.pop(context);
+      }
+    } catch (e) {
       print("EXCEPTION $e");
       return;
     }
   }
+
+  // Future<>
 }

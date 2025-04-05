@@ -177,11 +177,11 @@ class _HomeScreenState extends State<HomeScreen> {
                   ),
                   Spacer(),
                   TextButton(
-                    onPressed: () {
+                    onPressed: () async {
                       print(
                         "requesting for maintenance request(): ${request.id}",
                       );
-                      Provider.of<MaintenanceRequestProvider>(
+                      await Provider.of<MaintenanceRequestProvider>(
                         context,
                         listen: false,
                       ).acceptMaintenanceRequest(context, requestid);

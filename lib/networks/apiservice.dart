@@ -104,4 +104,47 @@ class ApiService {
       return null;
     }
   }
+
+  Future<MaintenanceRequestResponse?> patchMaintenanceRequestToStatusRequest({
+    required String? token,
+    required int maintenanceRequestId,
+    required int? handymanId,
+  }) async {
+    print('from patchMaintenanceRequestToStatusRequest() token: $token');
+    print(
+      'from patchMaintenanceRequestToStatusRequest() maintenanceRequestId: $maintenanceRequestId',
+    );
+    print(
+      'from patchMaintenanceRequestToStatusRequest() handymanId: $handymanId',
+    );
+
+    final url = Uri.parse(
+      "$rest/handyman/maintenance_request/patch-maintenance-request-to-requested/$maintenanceRequestId/$handymanId",
+    );
+    final headers = {
+      "Content-Type": "application/json",
+      "Accept": "application/json",
+      "Authorization": "Bearer $token",
+    };
+
+    try {
+      final response = await http.patch(url, headers: headers);
+
+      if (response.statusCode == 200 || response.statusCode == 201) {
+        final Map<String, dynamic> responseData = jsonDecode(response.body);
+        print(
+          "responseData from patchMaintenanceRequestToStatusRequest() Call: ${jsonEncode(responseData)}",
+        );
+        // debugPrint(jsonEncode(responseData), wrapWidth: 2048);
+
+        return MaintenanceRequestResponse.fromJson(responseData);
+      } else {
+        print('Error: ${response.statusCode} - ${response.body}');
+        return null;
+      }
+    } catch (e) {
+      print("EXCEPTION: $e");
+      return null;
+    }
+  }
 }
