@@ -4,9 +4,11 @@ import 'package:provider/provider.dart';
 import '../../../networks/apiservice.dart';
 import '../models/auth_model.dart';
 import '../models/maintenance_request_model.dart';
+import '../models/room_model.dart';
+import '../models/tenant_model.dart';
 import 'handy_man_provider.dart';
 
-class MaintenanceRequestProvider extends ChangeNotifier{
+class MaintenanceRequestProvider extends ChangeNotifier {
   final ApiService apiService = ApiService();
 
   bool _isLoading = false;
@@ -17,11 +19,20 @@ class MaintenanceRequestProvider extends ChangeNotifier{
   late int? handymanId;
 
   List<MaintenanceRequest?> _maintenanceRequestList = [];
-  List<MaintenanceRequest?> get maintenanceRequestList => _maintenanceRequestList;
-  
+  List<MaintenanceRequest?> get maintenanceRequestList =>
+      _maintenanceRequestList;
+
   List<MaintenanceRequest?> get pendingRequests {
-    return _maintenanceRequestList.where((request) => request?.status == 'pending').toList();
+    return _maintenanceRequestList
+        .where((request) => request?.status == 'pending')
+        .toList();
   }
+
+  // Tenant? _tenant;
+  // Tenant? get tenant => _tenant;
+
+  // Room? _room;
+  // Room? get room => _room;
 
   void addMaintenanceRequest(MaintenanceRequest request) {
     _maintenanceRequestList.add(request);
@@ -32,16 +43,19 @@ class MaintenanceRequestProvider extends ChangeNotifier{
     _maintenanceRequestList.remove(request);
     notifyListeners();
   }
-//note: no need for update setter because once the status changed to assigned: it will be removed to the list automatically
+  //note: no need for update setter because once the status changed to assigned: it will be removed to the list automatically
 
   void _initMaintenanceRequestDetails(context) {
-    final handymanProvider = Provider.of<HandyManProvider>(context, listen:  false);
+    final handymanProvider = Provider.of<HandyManProvider>(
+      context,
+      listen: false,
+    );
     token = handymanProvider.token;
     userId = handymanProvider.userId;
     handymanId = handymanProvider.handyman?.id;
   }
 
-  Future<void>fetchMaintenanceRequest(BuildContext context) async {
+  Future<void> fetchMaintenanceRequest(BuildContext context) async {
     _initMaintenanceRequestDetails(context);
 
     print("from fetchMaintenanceRequest() token: $token");
@@ -54,19 +68,39 @@ class MaintenanceRequestProvider extends ChangeNotifier{
     }
 
     try {
-       final response = await apiService.getMaintenanceRequest(token: token);
+      final response = await apiService.getMaintenanceRequest(token: token);
 
-       if(response != null && response.success) {
+      if (response != null && response.success) {
         print("success");
         _maintenanceRequestList = response.data.maintenanceRequests;
+        // _tenant = response.data.maintenanceRequests.tenant;
         notifyListeners();
-       }else {
+      } else {
         print("failed");
-       }
+      }
     } catch (e) {
       print("EXCEPTION: $e");
       return;
     }
   }
 
+  Future<void> acceptMaintenanceRequest(
+    BuildContext context,
+    int maintenanceRequestId,
+  ) async {
+    _initMaintenanceRequestDetails(context);
+    print(
+      "from acceptMaintenanceRequest().maintenenceRequestId: $maintenanceRequestId",
+    );
+    print("from acceptMaintenanceRequest().handymanId: $handymanId");
+    if (token == null || userId == null) {
+      print("no token detected at fetchHandyMan");
+      return;
+    }
+
+    try {} catch (e) {
+      print("EXCEPTION $e");
+      return;
+    }
+  }
 }

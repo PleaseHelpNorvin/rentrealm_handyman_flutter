@@ -38,6 +38,7 @@ class Room {
   });
 
   factory Room.fromJson(Map<String, dynamic> json) {
+    print("from room model: $json");
     // Handle room_picture_url: Check if it's a List<String> or a single String
     var roomPictureUrl = json['room_picture_url'] ?? [];
     if (roomPictureUrl is String) {
@@ -45,7 +46,6 @@ class Room {
     } else if (roomPictureUrl is List) {
       roomPictureUrl = List<String>.from(roomPictureUrl);
     }
-
 
     return Room(
       id: json['id'],
@@ -58,7 +58,7 @@ class Room {
       rentPrice: json['rent_price'],
       reservationFee: json['reservation_fee'],
       capacity: json['capacity'],
-      currentOccupants: json['current_occupants'],
+      currentOccupants: json['current_occupants'] ?? 0,
       minLease: json['min_lease'],
       size: json['size'],
       status: json['status'],

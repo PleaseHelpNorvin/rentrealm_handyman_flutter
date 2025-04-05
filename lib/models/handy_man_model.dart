@@ -1,4 +1,3 @@
-
 import 'auth_model.dart';
 
 class HandyManResponse {
@@ -32,16 +31,13 @@ class HandyManResponse {
 class HandyManData {
   List<Handyman> handymans;
 
-  HandyManData({
-    required this.handymans,
-  });
+  HandyManData({required this.handymans});
 
   factory HandyManData.fromJson(Map<String, dynamic> json) {
     var list = json['handymans'] as List;
-    List<Handyman> handymansList = list.map((i) => Handyman.fromJson(i)).toList();
-    return HandyManData(
-      handymans: handymansList,
-    );
+    List<Handyman> handymansList =
+        list.map((i) => Handyman.fromJson(i)).toList();
+    return HandyManData(handymans: handymansList);
   }
 
   // Map<String, dynamic> toJson() {
@@ -69,13 +65,17 @@ class Handyman {
   });
 
   factory Handyman.fromJson(Map<String, dynamic> json) {
+    print("from handyman model $json");
     return Handyman(
       id: json['id'],
       userId: json['user_id'],
       status: json['status'],
       createdAt: json['created_at'],
       updatedAt: json['updated_at'],
-      user: json['user'] != null ? User.fromJson(json['user']) : null, // Handle null user
+      user:
+          json['user'] != null
+              ? User.fromJson(json['user'])
+              : null, // Handle null user
     );
   }
 

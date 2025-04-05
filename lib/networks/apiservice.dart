@@ -10,18 +10,15 @@ import '../models/maintenance_request_model.dart';
 
 class ApiService {
   final String rest = Rest.baseUrl;
-  
-  Future<AuthResponse?>postloginHandyMan({
+
+  Future<AuthResponse?> postloginHandyMan({
     required String email,
     required String password,
   }) async {
     final uri = Uri.parse('$rest/login');
     print("postloginHandyMan() $uri");
     try {
-      final body = {
-        "email": email,
-        "password": password,
-      };
+      final body = {"email": email, "password": password};
 
       final response = await http.post(
         uri,
@@ -47,7 +44,7 @@ class ApiService {
     }
   }
 
-  Future<HandyManResponse?>getHandyMan({required String? token}) async {
+  Future<HandyManResponse?> getHandyMan({required String? token}) async {
     print("from getHandyManFetch() token: $token");
 
     final url = Uri.parse("$rest/handyman/handy_man/index");
@@ -72,35 +69,39 @@ class ApiService {
       print("EXCEPTION $e");
       return null;
     }
-  } 
+  }
 
-  Future<MaintenanceRequestResponse?>getMaintenanceRequest({required String? token}) async {
+  Future<MaintenanceRequestResponse?> getMaintenanceRequest({
+    required String? token,
+  }) async {
     print("from getMaintenanceRequest() token: $token");
 
-    final url = Uri.parse("$rest/handyman/maintenance_request/get-maintenance-request");
+    final url = Uri.parse(
+      "$rest/handyman/maintenance_request/get-maintenance-request",
+    );
     final headers = {
       "Content-Type": "application/json",
       "Accept": "application/json",
       "Authorization": "Bearer $token",
     };
-    try{
+    try {
       final response = await http.get(url, headers: headers);
 
       if (response.statusCode == 200 || response.statusCode == 201) {
         final Map<String, dynamic> responseData = jsonDecode(response.body);
-      print("responseData from getMaintenanceRequest() Call: ${jsonEncode(responseData)}");
-      // debugPrint(jsonEncode(responseData), wrapWidth: 1024);
+        // print(
+        //   "responseData from getMaintenanceRequest() Call: ${jsonEncode(responseData)}",
+        // );
+        debugPrint(jsonEncode(responseData), wrapWidth: 2048);
 
         return MaintenanceRequestResponse.fromJson(responseData);
       } else {
         print('Error: ${response.statusCode} - ${response.body}');
         return null;
       }
-    } catch(e) {
+    } catch (e) {
       print("EXCEPTION $e");
       return null;
     }
   }
-
-
 }

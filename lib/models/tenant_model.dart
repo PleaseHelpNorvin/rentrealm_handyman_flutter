@@ -1,3 +1,5 @@
+import 'user_profile_model.dart';
+
 class Tenant {
   final int id;
   final int profileId;
@@ -7,6 +9,7 @@ class Tenant {
   final String? moveOutDate;
   final String createdAt;
   final String updatedAt;
+  final UserProfile userProfile;
 
   Tenant({
     required this.id,
@@ -17,9 +20,12 @@ class Tenant {
     this.moveOutDate,
     required this.createdAt,
     required this.updatedAt,
+    required this.userProfile,
   });
 
   factory Tenant.fromJson(Map<String, dynamic> json) {
+    print("from Tenant model: $json");
+
     return Tenant(
       id: json['id'],
       profileId: json['profile_id'],
@@ -29,6 +35,7 @@ class Tenant {
       moveOutDate: json['move_out_date'],
       createdAt: json['created_at'],
       updatedAt: json['updated_at'],
+      userProfile: UserProfile.fromJson(json['user_profile']),
     );
   }
 }
