@@ -1,3 +1,4 @@
+import 'dart:async';
 import 'dart:convert';
 
 import 'package:flutter/foundation.dart';
@@ -44,10 +45,43 @@ class ApiService {
     }
   }
 
-  Future<HandyManResponse?> getHandyMan({required String? token}) async {
-    print("from getHandyManFetch() token: $token");
+  // Future<HandyManResponse?> getHandyMan({required String? token}) async {
+  //   print("from getHandyManFetch() token: $token");
 
-    final url = Uri.parse("$rest/handyman/handy_man/index");
+  //   final url = Uri.parse("$rest/handyman/handy_man/index");
+  //   final headers = {
+  //     "Content-Type": "application/json",
+  //     "Accept": "application/json",
+  //     "Authorization": "Bearer $token",
+  //   };
+
+  //   try {
+  //     final response = await http.get(url, headers: headers);
+
+  //     if (response.statusCode == 200 || response.statusCode == 201) {
+  //       final Map<String, dynamic> responseData = jsonDecode(response.body);
+  //       print("responseData from getHandyMan() Call: $responseData");
+  //       return HandyManResponse.fromJson(responseData);
+  //     } else {
+  //       print('Error: ${response.statusCode} - ${response.body}');
+  //       return null;
+  //     }
+  //   } catch (e) {
+  //     print("EXCEPTION $e");
+  //     return null;
+  //   }
+  // }
+
+  Future<HandyManResponse?> getHandyMan({
+    required String? token,
+    required int? userId,
+  }) async {
+    print("from getHandyman() token: $token");
+    print("from getHandyman() userId: $userId");
+
+    final url = Uri.parse(
+      "$rest/handyman/handy_man/show-handyman-by-user-id/$userId",
+    );
     final headers = {
       "Content-Type": "application/json",
       "Accept": "application/json",
@@ -55,11 +89,12 @@ class ApiService {
     };
 
     try {
+      print("uri: $url");
       final response = await http.get(url, headers: headers);
 
       if (response.statusCode == 200 || response.statusCode == 201) {
         final Map<String, dynamic> responseData = jsonDecode(response.body);
-        print("responseData from getHandyMan() Call: $responseData");
+        print("responseData from getHandyman() Call: $responseData");
         return HandyManResponse.fromJson(responseData);
       } else {
         print('Error: ${response.statusCode} - ${response.body}');
@@ -128,6 +163,7 @@ class ApiService {
     };
 
     try {
+      print("url: $url");
       final response = await http.patch(url, headers: headers);
 
       if (response.statusCode == 200 || response.statusCode == 201) {

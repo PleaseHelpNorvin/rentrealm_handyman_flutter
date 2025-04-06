@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:curved_navigation_bar/curved_navigation_bar.dart';
+import 'package:rentrealm_handyman_flutter/screens/homelogged/todo/todo_screen.dart';
 import 'assigned_maintenance_list/assigned_maintenance.dart';
 import 'home/home.dart'; // Import your HomeScreen
 import 'history/history.dart';
@@ -22,6 +23,7 @@ class _HomeloggedState extends State<Homelogged> {
     const HomeScreen(), // Home screen
     const RequestedMaintenanceScreen(),
     const AssignedMaintenanceScreen(),
+    const TodoScreen(),
     const HistoryScreen(),
     // Add other screens here if needed
   ];
@@ -31,6 +33,7 @@ class _HomeloggedState extends State<Homelogged> {
     'Home', // Title for HomeScreen
     'Requested Maintenance List',
     'Assigned Maintenance List',
+    'TodoScreen()',
     'History', // Title for SettingScreen
   ];
 
@@ -70,6 +73,7 @@ class _HomeloggedState extends State<Homelogged> {
           Icon(Icons.home, size: 30, color: Colors.white), // Home icon
           Icon(Icons.request_page, size: 30, color: Colors.white),
           Icon(Icons.assignment, size: 30, color: Colors.white),
+          Icon(Icons.today_outlined, size: 30, color: Colors.white),
           Icon(Icons.history, size: 30, color: Colors.white), // Settings icon
         ],
         index: _currentIndex,

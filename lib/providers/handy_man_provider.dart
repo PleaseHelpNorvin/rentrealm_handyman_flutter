@@ -37,7 +37,10 @@ class HandyManProvider extends ChangeNotifier {
     }
 
     try {
-      final response = await apiService.getHandyMan(token: token);
+      final response = await apiService.getHandyMan(
+        token: token,
+        userId: userId,
+      );
       if (response != null && response.success) {
         _handyman = response.data.handymans.first;
         notifyListeners();

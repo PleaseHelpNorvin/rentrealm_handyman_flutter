@@ -29,16 +29,29 @@ class MaintenanceRequestProvider extends ChangeNotifier {
   }
 
   List<MaintenanceRequest?> get requestedRequests {
-    return _maintenanceRequestList
-        .where((request) => request?.status == 'requested')
-        .toList();
+    return _maintenanceRequestList.where((request) {
+      return request?.status == 'requested' &&
+          request?.handymanId == handymanId;
+    }).toList();
   }
 
   List<MaintenanceRequest?> get assignedRequests {
-    return _maintenanceRequestList
-        .where((request) => request?.status == 'assigned')
-        .toList();
+    return _maintenanceRequestList.where((request) {
+      return request?.status == 'assigned' && request?.handymanId == handymanId;
+    }).toList();
   }
+
+  // List<MaintenanceRequest?> get requestedRequests {
+  //   return _maintenanceRequestList
+  //       .where((request) => request?.status == 'requested')
+  //       .toList();
+  // }
+
+  // List<MaintenanceRequest?> get assignedRequests {
+  //   return _maintenanceRequestList
+  //       .where((request) => request?.status == 'assigned')
+  //       .toList();
+  // }
 
   // Tenant? _tenant;
   // Tenant? get tenant => _tenant;
