@@ -231,18 +231,29 @@ class RequestedMaintenanceScreenState
     );
   }
 
-  Widget _buildDetailRow(String label, String value) {
+   Widget _buildDetailRow(String label, String value) {
     return Padding(
       padding: const EdgeInsets.symmetric(vertical: 4),
       child: Row(
+        crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Text(label, style: TextStyle(fontWeight: FontWeight.bold)),
+          Text(
+            label,
+            style: TextStyle(fontWeight: FontWeight.bold),
+            softWrap: true,
+          ),
           SizedBox(width: 8),
-          Text(value),
+          Expanded( 
+            child: Text(
+              value,
+              softWrap: true,
+            ),
+          ),
         ],
       ),
     );
   }
+
 
   @override
   Widget build(BuildContext context) {

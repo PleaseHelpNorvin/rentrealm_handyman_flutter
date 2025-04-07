@@ -1,3 +1,4 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
@@ -47,7 +48,7 @@ class _AssignedMaintenanceScreenState extends State<AssignedMaintenanceScreen> {
           return Center(child: CircularProgressIndicator());
         }
 
-        // If no pending requests
+        // If no assigned requests
         if (maintenanceRequests.isEmpty) {
           return Center(child: Text("No Assigned requests"));
         }
@@ -89,19 +90,170 @@ class _AssignedMaintenanceScreenState extends State<AssignedMaintenanceScreen> {
                 trailing: Icon(Icons.arrow_forward, color: Colors.blue),
                 onTap: () {
                   // print("Tapped: ${request.id}");
-                  // _maintenanceRequestDetails(
-                  //   context,
-                  //   request,
-                  //   room,
-                  //   tenant,
-                  //   tenantProfile,
-                  // );
+                  _maintenanceRequestDetails(
+                    context,
+                    request,
+                    room,
+                    tenant,
+                    tenantProfile,
+                  );
                 },
               ),
             );
           },
         );
       },
+    );
+  }
+
+  void _maintenanceRequestDetails(
+    BuildContext context,
+    request,
+    room,
+    tenant,
+    tenantProfile,
+  ) {
+    int requestid = request.id;
+    String requestCode = request.ticketCode;
+    String roomCode = room.roomCode;
+    String tenantName = tenant.name;
+    String tenantPhoneNumber = tenantProfile.phoneNumber;
+    String requestTitle = request.title;
+    String requestProblem = request.description;
+    String assignedBy = request.assignedBy?.name;
+    // String assignedAt = request.assignedAt.
+    // String requestImage = request.images.toString();
+    List<String> requestImages =
+        request.images is List<String> ? List<String>.from(request.images) : [];
+    String requestImage = requestImages.isNotEmpty ? requestImages.first : '';
+    print("request Image: $requestImage");
+    showModalBottomSheet(
+      context: context,
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.vertical(top: Radius.circular(16)),
+      ),
+      backgroundColor: Colors.white,
+      builder: (context) {
+        return Padding(
+          padding: const EdgeInsets.symmetric(vertical: 16, horizontal: 20),
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              // Fixed header (Row)
+              Row(
+                children: [
+                  Text(
+                    "Request Details",
+                    style: TextStyle(
+                      fontSize: 18,
+                      fontWeight: FontWeight.bold,
+                      color: Colors.blueAccent,
+                    ),
+                  ),
+                  Spacer(),
+                  TextButton(
+                    onPressed: () async {
+                      print(" for maintenance request(): ${request.id}");
+                      await Provider.of<MaintenanceRequestProvider>(
+                        context,
+                        listen: false,
+                      ).startMaintenanceRequest(context, requestid);
+                    },
+                    style: TextButton.styleFrom(
+                      backgroundColor: Colors.orange,
+                      foregroundColor: Colors.white,
+                      padding: const EdgeInsets.symmetric(horizontal: 16),
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(5),
+                      ),
+                      textStyle: const TextStyle(
+                        fontSize: 16,
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ),
+                    child: Text("Start Working"),
+                  ),
+                ],
+              ),
+              SizedBox(height: 8),
+
+              // Scrollable content
+              Expanded(
+                child: SingleChildScrollView(
+                  child: Column(
+                    mainAxisSize: MainAxisSize.min,
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      _buildDetailRow("Assigned By:", assignedBy),
+                      // _buildDetailRow("assigned At:", AssignedAt),
+                      Divider(),
+                      _buildDetailRow("Request ID:", requestid.toString()),
+                      _buildDetailRow("Request Code:", requestCode),
+                      _buildDetailRow("Room:", roomCode),
+                      _buildDetailRow("Requester Name:", tenantName),
+                      _buildDetailRow("Requester Number:", tenantPhoneNumber),
+                      Divider(),
+                      _buildDetailRow("Request Title: ", requestTitle),
+                      _buildDetailRow("Problem:", requestProblem),
+                      Divider(),
+
+                      // Image section
+                      requestImage.isNotEmpty
+                          ? Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Text("Image:"),
+                              SizedBox(height: 8),
+                              Container(
+                                // height: 300, // Set fixed height for the image
+                                child: CachedNetworkImage(
+                                  imageUrl: requestImage,
+                                  width: double.infinity,
+                                  fit: BoxFit.cover,
+                                  placeholder:
+                                      (context, url) =>
+                                          CircularProgressIndicator(),
+                                  errorWidget:
+                                      (context, url, error) =>
+                                          Icon(Icons.error),
+                                ),
+                              ),
+                            ],
+                          )
+                          : _buildDetailRow("Image:", "No image available"),
+                      SizedBox(height: 16),
+                    ],
+                  ),
+                ),
+              ),
+            ],
+          ),
+        );
+      },
+    );
+  }
+
+  Widget _buildDetailRow(String label, String value) {
+    return Padding(
+      padding: const EdgeInsets.symmetric(vertical: 4),
+      child: Row(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+           Text(
+            label,
+            style: TextStyle(fontWeight: FontWeight.bold),
+            softWrap: true,
+          ),
+          SizedBox(width: 8),
+          Expanded( 
+            child: Text(
+              value,
+              softWrap: true,
+            ),
+          ),
+        ],
+      ),
     );
   }
 

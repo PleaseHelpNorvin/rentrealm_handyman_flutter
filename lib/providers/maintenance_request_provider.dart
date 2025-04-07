@@ -1,4 +1,6 @@
+import 'package:collection/collection.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/scheduler.dart';
 import 'package:http/http.dart';
 import 'package:provider/provider.dart';
 import '../../../networks/apiservice.dart';
@@ -6,10 +8,13 @@ import '../models/auth_model.dart';
 import '../models/maintenance_request_model.dart';
 import '../models/room_model.dart';
 import '../models/tenant_model.dart';
+import '../screens/homelogged/requested_maintenance_list/requested_maintenance.dart';
 import 'handy_man_provider.dart';
 
 class MaintenanceRequestProvider extends ChangeNotifier {
   final ApiService apiService = ApiService();
+  Function? updateCurrentIndexCallback;
+
 
   bool _isLoading = false;
   bool get isLoading => _isLoading;
@@ -17,6 +22,16 @@ class MaintenanceRequestProvider extends ChangeNotifier {
   late String? token;
   late int? userId;
   late int? handymanId;
+
+  void setUpdateCurrentIndexCallback(Function callback) {
+    updateCurrentIndexCallback = callback;
+  }
+
+  void someFunctionThatChangesIndex(int newIndex) {
+    if (updateCurrentIndexCallback != null) {
+      updateCurrentIndexCallback!(newIndex);
+    }
+  }
 
   List<MaintenanceRequest?> _maintenanceRequestList = [];
   List<MaintenanceRequest?> get maintenanceRequestList =>
@@ -40,24 +55,17 @@ class MaintenanceRequestProvider extends ChangeNotifier {
       return request?.status == 'assigned' && request?.handymanId == handymanId;
     }).toList();
   }
+  
+  MaintenanceRequest? get inProgressRequest {
+    return _maintenanceRequestList.firstWhereOrNull((request) =>
+        request?.status == 'in_progress' && request?.handymanId == handymanId);
+  }
 
-  // List<MaintenanceRequest?> get requestedRequests {
-  //   return _maintenanceRequestList
-  //       .where((request) => request?.status == 'requested')
-  //       .toList();
-  // }
-
-  // List<MaintenanceRequest?> get assignedRequests {
-  //   return _maintenanceRequestList
-  //       .where((request) => request?.status == 'assigned')
-  //       .toList();
-  // }
-
-  // Tenant? _tenant;
-  // Tenant? get tenant => _tenant;
-
-  // Room? _room;
-  // Room? get room => _room;
+  List<MaintenanceRequest?> get completedRequests {
+    return _maintenanceRequestList.where((request) {
+      return request?.status == 'completed' && request?.handymanId == handymanId;
+    }).toList();
+  }
 
   void addMaintenanceRequest(MaintenanceRequest request) {
     _maintenanceRequestList.add(request);
@@ -133,6 +141,10 @@ class MaintenanceRequestProvider extends ChangeNotifier {
       if (response != null && response.success) {
         await fetchMaintenanceRequest(context);
         Navigator.pop(context);
+        if (updateCurrentIndexCallback != null) {
+          updateCurrentIndexCallback!(1); // Pass the index value directly
+        }
+
       }
     } catch (e) {
       print("EXCEPTION $e");
@@ -140,5 +152,69 @@ class MaintenanceRequestProvider extends ChangeNotifier {
     }
   }
 
-  // Future<>
+  Future<void>startMaintenanceRequest(
+    BuildContext context, 
+    int maintenanceRequestId,
+  ) async {
+    _initMaintenanceRequestDetails(context);
+    print(
+      "from startMaintenanceRequest().maintenenceRequestId: $maintenanceRequestId",
+    );
+    
+    if (token == null || userId == null || handymanId == null) {
+      print("no token detected at fetchHandyMan");
+      return;
+    }
+
+    try {
+      final response = await apiService.patchMaintenanceRequestToStatusInProgress(token: token, maintenanceRequestId: maintenanceRequestId);
+      if (response != null && response.success) {
+        await fetchMaintenanceRequest(context);
+        Navigator.pop(context);
+        if (updateCurrentIndexCallback != null) {
+          updateCurrentIndexCallback!(3); // Pass the index value directly
+        }
+      } else {
+        print("failed request startMaintenance");
+        // print("object $errorMessage ");
+        // print(response?.message );
+      }
+    } catch (e) {
+      print("EXCEPTION $e");
+      return;
+    }
+  }
+
+  Future<void>completeMaintenanceRequest(
+    BuildContext context, 
+    int maintenanceRequestId,
+  ) async{
+    _initMaintenanceRequestDetails(context);
+    print(
+      "from completeMaintenanceRequest().maintenenceRequestId: $maintenanceRequestId",
+    );
+
+    if (token == null || userId == null || handymanId == null) {
+      print("no token detected at fetchHandyMan");
+      return;
+    }
+
+    try {
+      final response = await apiService.patchMaintenanceRequestToStatusComplete(token: token, maintenanceRequestId: maintenanceRequestId);
+
+      if (response != null && response.success) {
+        await fetchMaintenanceRequest(context);
+        // Navigator.pop(context);
+        if (updateCurrentIndexCallback != null) {
+          updateCurrentIndexCallback!(4); // Pass the index value directly
+        }
+      } else {
+        print("failed request completeMaintenanceRequest");
+
+      }
+    } catch (e) {
+      print("EXCEPTION $e");
+      return;
+    }
+  }
 }

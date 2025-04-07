@@ -187,7 +187,7 @@ class _HomeScreenState extends State<HomeScreen> {
                       ).acceptMaintenanceRequest(context, requestid);
                     },
                     style: TextButton.styleFrom(
-                      backgroundColor: Colors.green,
+                      backgroundColor: Colors.blue,
                       foregroundColor: Colors.white,
                       padding: const EdgeInsets.symmetric(horizontal: 16),
                       shape: RoundedRectangleBorder(
@@ -261,14 +261,25 @@ class _HomeScreenState extends State<HomeScreen> {
     return Padding(
       padding: const EdgeInsets.symmetric(vertical: 4),
       child: Row(
+        crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Text(label, style: TextStyle(fontWeight: FontWeight.bold)),
+          Text(
+            label,
+            style: TextStyle(fontWeight: FontWeight.bold),
+            softWrap: true,
+          ),
           SizedBox(width: 8),
-          Text(value),
+          Expanded( 
+            child: Text(
+              value,
+              softWrap: true,
+            ),
+          ),
         ],
       ),
     );
   }
+
 
   @override
   Widget build(BuildContext context) {

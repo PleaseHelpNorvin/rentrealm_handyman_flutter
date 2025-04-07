@@ -8,6 +8,11 @@ import 'providers/auth_provider.dart';
 import 'providers/maintenance_request_provider.dart';
 import 'screens/auth/login.dart';
 import 'screens/get_started.dart';
+import 'screens/homelogged/assigned_maintenance_list/assigned_maintenance.dart';
+import 'screens/homelogged/history/history.dart';
+import 'screens/homelogged/home/home.dart';
+import 'screens/homelogged/requested_maintenance_list/requested_maintenance.dart';
+import 'screens/homelogged/todo/todo_screen.dart';
 
 class MyHttpOverrides extends HttpOverrides{
   @override
@@ -88,9 +93,13 @@ class _MyAppState extends State<MyApp> {
             routes: {
               '/get_started' : (context) => GetStartedScreen(),
               '/login': (context) => LoginScreen(),
+              '/home': (context) => const HomeScreen(),
+              '/requestedMaintenance': (context) => const RequestedMaintenanceScreen(),
+              '/assignedMaintenance': (context) => const AssignedMaintenanceScreen(),
+              '/todo': (context) => const TodoScreen(),
+              '/history': (context) => const HistoryScreen(),
+
             },
-
-
           );
         } 
       ),

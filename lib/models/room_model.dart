@@ -1,3 +1,5 @@
+import 'property_model.dart';
+
 class Room {
   final int id;
   final int propertyId;
@@ -16,6 +18,8 @@ class Room {
   final String unitType;
   final String createdAt;
   final String updatedAt;
+  final Property? property;
+  
 
   Room({
     required this.id,
@@ -35,6 +39,7 @@ class Room {
     required this.unitType,
     required this.createdAt,
     required this.updatedAt,
+    this.property,
   });
 
   factory Room.fromJson(Map<String, dynamic> json) {
@@ -65,6 +70,7 @@ class Room {
       unitType: json['unit_type'],
       createdAt: json['created_at'],
       updatedAt: json['updated_at'],
+      property: json['property'] != null ? Property.fromJson(json['property']) : null,
     );
   }
 }

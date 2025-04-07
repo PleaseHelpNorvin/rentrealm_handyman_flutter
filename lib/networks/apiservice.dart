@@ -183,4 +183,91 @@ class ApiService {
       return null;
     }
   }
+
+
+
+  Future<MaintenanceRequestResponse?> patchMaintenanceRequestToStatusInProgress({
+    required String? token,
+    required int maintenanceRequestId,
+  }) async {
+    print('from patchMaintenanceRequestToStatusInProgress() token: $token');
+    print(
+      'from patchMaintenanceRequestToStatusInProgress() maintenanceRequestId: $maintenanceRequestId',
+    );
+ 
+    final url = Uri.parse(
+      "$rest/handyman/maintenance_request/patch-maintenance-request-to-in-progress/$maintenanceRequestId",
+    );
+    final headers = {
+      "Content-Type": "application/json",
+      "Accept": "application/json",
+      "Authorization": "Bearer $token",
+    };
+
+    try {
+      print("url: $url");
+      final response = await http.patch(url, headers: headers);
+
+      if (response.statusCode == 200 || response.statusCode == 201) {
+        final Map<String, dynamic> responseData = jsonDecode(response.body);
+        print(
+          "responseData from patchMaintenanceRequestToStatusInProgress() Call: ${jsonEncode(responseData)}",
+        );
+        // debugPrint(jsonEncode(responseData), wrapWidth: 2048);
+
+        return MaintenanceRequestResponse.fromJson(responseData);
+      } else {
+        // final Map<String, dynamic> responseData = jsonDecode(response.body);
+        // final errorMessage = responseData['message'] ?? 'Something went wrong';
+        // print('Error: ${response.statusCode} - $errorMessage');
+        // return errorMessage; 
+        print('Error: ${response.statusCode} - ${response.body}');
+        return null;
+      }
+    } catch (e) {
+      print("EXCEPTION: $e");
+      return null;
+    }
+  }
+
+  Future<MaintenanceRequestResponse?>patchMaintenanceRequestToStatusComplete({
+    required String? token,
+    required int maintenanceRequestId,
+  }) async {
+    print('from patchMaintenanceRequestToStatusComplete() token: $token');
+    print(
+      'from patchMaintenanceRequestToStatusComplete() maintenanceRequestId: $maintenanceRequestId',
+    );
+
+    final url = Uri.parse(
+      "$rest/handyman/maintenance_request/patch-maintenance-request-to-in-complete/$maintenanceRequestId",
+    );
+
+    final headers = {
+      "Content-Type": "application/json",
+      "Accept": "application/json",
+      "Authorization": "Bearer $token",
+    };
+
+    try {
+      final response = await http.patch(url, headers: headers);
+
+      if (response.statusCode == 200 || response.statusCode == 201) {
+        final Map<String, dynamic> responseData = jsonDecode(response.body);
+        print(
+          "responseData from patchMaintenanceRequestToStatusComplete() Call: ${jsonEncode(responseData)}",
+        );
+        // debugPrint(jsonEncode(responseData), wrapWidth: 2048);
+
+        return MaintenanceRequestResponse.fromJson(responseData);
+      } else {
+        print('Error: ${response.statusCode} - ${response.body}');
+        return null;
+      }
+
+    } catch (e) {
+      print("EXCEPTION: $e");
+      return null;
+    }
+  }
 }
