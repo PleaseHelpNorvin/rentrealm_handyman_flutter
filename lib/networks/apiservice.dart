@@ -184,9 +184,8 @@ class ApiService {
     }
   }
 
-
-
-  Future<MaintenanceRequestResponse?> patchMaintenanceRequestToStatusInProgress({
+  Future<MaintenanceRequestResponse?>
+  patchMaintenanceRequestToStatusInProgress({
     required String? token,
     required int maintenanceRequestId,
   }) async {
@@ -194,7 +193,7 @@ class ApiService {
     print(
       'from patchMaintenanceRequestToStatusInProgress() maintenanceRequestId: $maintenanceRequestId',
     );
- 
+
     final url = Uri.parse(
       "$rest/handyman/maintenance_request/patch-maintenance-request-to-in-progress/$maintenanceRequestId",
     );
@@ -220,7 +219,7 @@ class ApiService {
         // final Map<String, dynamic> responseData = jsonDecode(response.body);
         // final errorMessage = responseData['message'] ?? 'Something went wrong';
         // print('Error: ${response.statusCode} - $errorMessage');
-        // return errorMessage; 
+        // return errorMessage;
         print('Error: ${response.statusCode} - ${response.body}');
         return null;
       }
@@ -230,7 +229,7 @@ class ApiService {
     }
   }
 
-  Future<MaintenanceRequestResponse?>patchMaintenanceRequestToStatusComplete({
+  Future<MaintenanceRequestResponse?> patchMaintenanceRequestToForApprove({
     required String? token,
     required int maintenanceRequestId,
   }) async {
@@ -240,7 +239,7 @@ class ApiService {
     );
 
     final url = Uri.parse(
-      "$rest/handyman/maintenance_request/patch-maintenance-request-to-in-complete/$maintenanceRequestId",
+      "$rest/handyman/maintenance_request/patch-maintenance-request-to-for-approve/$maintenanceRequestId",
     );
 
     final headers = {
@@ -264,7 +263,6 @@ class ApiService {
         print('Error: ${response.statusCode} - ${response.body}');
         return null;
       }
-
     } catch (e) {
       print("EXCEPTION: $e");
       return null;

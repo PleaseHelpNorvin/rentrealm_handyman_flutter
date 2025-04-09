@@ -1,28 +1,20 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
 
 import '../../../models/maintenance_request_model.dart';
 import '../../../providers/handy_man_provider.dart';
 import '../../../providers/maintenance_request_provider.dart';
-import 'package:intl/intl.dart';
 
-class AssignedMaintenanceScreen extends StatefulWidget {
-  const AssignedMaintenanceScreen({super.key});
+class ForApproveScreen extends StatefulWidget {
+  const ForApproveScreen({super.key});
 
   @override
-  State<AssignedMaintenanceScreen> createState() =>
-      _AssignedMaintenanceScreenState();
+  State<ForApproveScreen> createState() => _ForApproveScreenState();
 }
 
-class _AssignedMaintenanceScreenState extends State<AssignedMaintenanceScreen> {
-  @override
-  void initState() {
-    super.initState();
-    // Initial data fetch
-    _fetchData();
-  }
-
+class _ForApproveScreenState extends State<ForApproveScreen> {
   Future<void> _refreshData() async {
     print("Refreshing data...");
     await _fetchData();
@@ -39,19 +31,30 @@ class _AssignedMaintenanceScreenState extends State<AssignedMaintenanceScreen> {
     ).fetchMaintenanceRequest(context);
   }
 
-  Widget _buildMaintenanceAssignedRequest(BuildContext context) {
+  String formatDateTime(String? dateString) {
+    if (dateString == null) return 'Not yet assigned';
+    try {
+      DateTime date = DateTime.parse(dateString);
+      return DateFormat('MMM dd, yyyy hh:mm a').format(date);
+    } catch (e) {
+      return dateString; // fallback if error
+    }
+  }
+
+  Widget _buildMaintenanceForApproveRequest(BuildContext context) {
     return Consumer<MaintenanceRequestProvider>(
       builder: (context, maintenanceRequestProvider, child) {
-        final maintenanceRequests = maintenanceRequestProvider.assignedRequests;
+        final maintenanceRequests =
+            maintenanceRequestProvider.forApproveRequest;
 
         // If data is loading
         if (maintenanceRequestProvider.isLoading) {
           return Center(child: CircularProgressIndicator());
         }
 
-        // If no assigned requests
+        // If no Requested requests
         if (maintenanceRequests.isEmpty) {
-          return Center(child: Text("No Assigned requests"));
+          return Center(child: Text("No for approve requests"));
         }
 
         return ListView.builder(
@@ -90,7 +93,7 @@ class _AssignedMaintenanceScreenState extends State<AssignedMaintenanceScreen> {
                 leading: Icon(Icons.build, color: Colors.blue, size: 30),
                 trailing: Icon(Icons.arrow_forward, color: Colors.blue),
                 onTap: () {
-                  // print("Tapped: ${request.id}");
+                  print("Tapped: ${request.id}");
                   _maintenanceRequestDetails(
                     context,
                     request,
@@ -121,25 +124,11 @@ class _AssignedMaintenanceScreenState extends State<AssignedMaintenanceScreen> {
     String tenantPhoneNumber = tenantProfile.phoneNumber;
     String requestTitle = request.title;
     String requestProblem = request.description;
-    String assignedBy = request.assignedBy?.name;
-    String? assignedAt = request.assignedAt;
-    // String assignedAt = request.assignedAt.
     // String requestImage = request.images.toString();
     List<String> requestImages =
         request.images is List<String> ? List<String>.from(request.images) : [];
     String requestImage = requestImages.isNotEmpty ? requestImages.first : '';
     print("request Image: $requestImage");
-
-    String formatDateTime(String? dateString) {
-      if (dateString == null) return 'Not yet assigned';
-      try {
-        DateTime date = DateTime.parse(dateString);
-        return DateFormat('MMM dd, yyyy hh:mm a').format(date);
-      } catch (e) {
-        return dateString; // fallback if error
-      }
-    }
-
     showModalBottomSheet(
       context: context,
       shape: RoundedRectangleBorder(
@@ -157,7 +146,7 @@ class _AssignedMaintenanceScreenState extends State<AssignedMaintenanceScreen> {
               Row(
                 children: [
                   Text(
-                    "Request Details",
+                    "Maintenance Request Details",
                     style: TextStyle(
                       fontSize: 18,
                       fontWeight: FontWeight.bold,
@@ -168,10 +157,10 @@ class _AssignedMaintenanceScreenState extends State<AssignedMaintenanceScreen> {
                   TextButton(
                     onPressed: () async {
                       print(" for maintenance request(): ${request.id}");
-                      await Provider.of<MaintenanceRequestProvider>(
-                        context,
-                        listen: false,
-                      ).startMaintenanceRequest(context, requestid);
+                      // await Provider.of<MaintenanceRequestProvider>(
+                      //   context,
+                      //   listen: false,
+                      // ).acceptMaintenanceRequest(context, requestid);
                     },
                     style: TextButton.styleFrom(
                       backgroundColor: Colors.orange,
@@ -185,7 +174,7 @@ class _AssignedMaintenanceScreenState extends State<AssignedMaintenanceScreen> {
                         fontWeight: FontWeight.bold,
                       ),
                     ),
-                    child: Text("Start Working"),
+                    child: Text("For Approval"),
                   ),
                 ],
               ),
@@ -198,12 +187,6 @@ class _AssignedMaintenanceScreenState extends State<AssignedMaintenanceScreen> {
                     mainAxisSize: MainAxisSize.min,
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      _buildDetailRow("Assigned By:", assignedBy),
-                      _buildDetailRow(
-                        "Assigned At:",
-                        formatDateTime(assignedAt),
-                      ),
-                      Divider(),
                       _buildDetailRow("Request ID:", requestid.toString()),
                       _buildDetailRow("Request Code:", requestCode),
                       _buildDetailRow("Room:", roomCode),
@@ -276,7 +259,7 @@ class _AssignedMaintenanceScreenState extends State<AssignedMaintenanceScreen> {
         child: RefreshIndicator(
           onRefresh: _refreshData,
           child: ListView(
-            children: [_buildMaintenanceAssignedRequest(context)],
+            children: [_buildMaintenanceForApproveRequest(context)],
           ),
         ),
       ),

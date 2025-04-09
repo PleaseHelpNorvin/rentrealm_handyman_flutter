@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:curved_navigation_bar/curved_navigation_bar.dart';
 import 'package:provider/provider.dart';
+import 'package:rentrealm_handyman_flutter/screens/homelogged/for_approve_list/for_approve.dart';
 import '../../providers/maintenance_request_provider.dart';
 import 'home/home.dart';
 import 'requested_maintenance_list/requested_maintenance.dart';
@@ -25,15 +26,19 @@ class _HomeloggedState extends State<Homelogged> {
     super.initState();
     // Setting the updateCurrentIndex callback when the widget is initialized
     // Ensures the callback is set when the provider is created
-    Provider.of<MaintenanceRequestProvider>(context, listen: false)
-        .setUpdateCurrentIndexCallback(updateCurrentIndex);
+    Provider.of<MaintenanceRequestProvider>(
+      context,
+      listen: false,
+    ).setUpdateCurrentIndexCallback(updateCurrentIndex);
   }
+
   // List of pages for bottom navigation
   final List<Widget> _screens = [
     const HomeScreen(),
     const RequestedMaintenanceScreen(),
     const AssignedMaintenanceScreen(),
     const TodoScreen(),
+    const ForApproveScreen(),
     const HistoryScreen(),
   ];
 
@@ -43,12 +48,12 @@ class _HomeloggedState extends State<Homelogged> {
     'Requested Maintenance List',
     'Assigned Maintenance List',
     'Todo',
+    'for Approve',
     'History',
   ];
 
   // Method to update current index for navigation
   void updateCurrentIndex(int index) {
-
     print("updateCurrentIndex parameter: $index");
     setState(() {
       _currentIndex = index;
@@ -66,7 +71,9 @@ class _HomeloggedState extends State<Homelogged> {
         builder: (context, maintenanceRequestProvider, child) {
           // Set the callback to update the index when the provider is created
           if (maintenanceRequestProvider.updateCurrentIndexCallback == null) {
-            maintenanceRequestProvider.setUpdateCurrentIndexCallback(updateCurrentIndex);
+            maintenanceRequestProvider.setUpdateCurrentIndexCallback(
+              updateCurrentIndex,
+            );
           }
 
           return Scaffold(
@@ -82,7 +89,8 @@ class _HomeloggedState extends State<Homelogged> {
                 ),
               ],
             ),
-            body: _screens[_currentIndex], // Display current screen based on _currentIndex
+            body:
+                _screens[_currentIndex], // Display current screen based on _currentIndex
             backgroundColor: const Color(0xFFF6F7FD),
             bottomNavigationBar: CurvedNavigationBar(
               color: Colors.blue,
@@ -92,6 +100,7 @@ class _HomeloggedState extends State<Homelogged> {
                 Icon(Icons.request_page, size: 30, color: Colors.white),
                 Icon(Icons.assignment, size: 30, color: Colors.white),
                 Icon(Icons.today_outlined, size: 30, color: Colors.white),
+                Icon(Icons.check, size: 30, color: Colors.white),
                 Icon(Icons.history, size: 30, color: Colors.white),
               ],
               index: _currentIndex,

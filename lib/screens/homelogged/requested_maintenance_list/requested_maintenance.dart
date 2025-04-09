@@ -1,5 +1,6 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
 
 import '../../../models/maintenance_request_model.dart';
@@ -37,6 +38,16 @@ class RequestedMaintenanceScreenState
       context,
       listen: false,
     ).fetchMaintenanceRequest(context);
+  }
+
+  String formatDateTime(String? dateString) {
+    if (dateString == null) return 'Not yet assigned';
+    try {
+      DateTime date = DateTime.parse(dateString);
+      return DateFormat('MMM dd, yyyy hh:mm a').format(date);
+    } catch (e) {
+      return dateString; // fallback if error
+    }
   }
 
   Widget _buildMaintenanceRequestedRequest(BuildContext context) {
@@ -231,7 +242,7 @@ class RequestedMaintenanceScreenState
     );
   }
 
-   Widget _buildDetailRow(String label, String value) {
+  Widget _buildDetailRow(String label, String value) {
     return Padding(
       padding: const EdgeInsets.symmetric(vertical: 4),
       child: Row(
@@ -243,17 +254,11 @@ class RequestedMaintenanceScreenState
             softWrap: true,
           ),
           SizedBox(width: 8),
-          Expanded( 
-            child: Text(
-              value,
-              softWrap: true,
-            ),
-          ),
+          Expanded(child: Text(value, softWrap: true)),
         ],
       ),
     );
   }
-
 
   @override
   Widget build(BuildContext context) {

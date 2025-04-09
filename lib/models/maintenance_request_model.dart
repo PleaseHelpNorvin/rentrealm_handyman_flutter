@@ -50,13 +50,16 @@ class MaintenanceRequest {
   final List<dynamic> images;
   final String status;
   final String requestedAt;
+  final String? assignedAt;
   final String? assistedAt;
+  final String? approvedAt;
   final String? completedAt;
   final String createdAt;
   final String updatedAt;
   final Tenant? tenant;
   final Room? room;
   final Handyman? handyman;
+  final User? approvedBy;
 
   MaintenanceRequest({
     required this.id,
@@ -70,13 +73,16 @@ class MaintenanceRequest {
     required this.images,
     required this.status,
     required this.requestedAt,
+    this.assignedAt,
     this.assistedAt,
+    this.approvedAt,
     this.completedAt,
     required this.createdAt,
     required this.updatedAt,
     this.tenant,
     this.room,
     this.handyman,
+    this.approvedBy,
   });
 
   factory MaintenanceRequest.fromJson(Map<String, dynamic> json) {
@@ -113,7 +119,9 @@ class MaintenanceRequest {
       images: images,
       status: json['status'] ?? '', // Ensure status is a string
       requestedAt: json['requested_at'] ?? '',
+      assignedAt: json['assigned_at'] ?? '',
       assistedAt: json['assisted_at'],
+      approvedAt: json['approved_at'],
       completedAt: json['completed_at'],
       createdAt: json['created_at'] ?? '',
       updatedAt: json['updated_at'] ?? '',
@@ -121,6 +129,8 @@ class MaintenanceRequest {
       room: json['room'] != null ? Room.fromJson(json['room']) : null,
       handyman:
           json['handyman'] != null ? Handyman.fromJson(json['handyman']) : null,
+      approvedBy:
+          json['approvedBy'] != null ? User.fromJson(json['approvedBy']) : null,
     );
   }
 }

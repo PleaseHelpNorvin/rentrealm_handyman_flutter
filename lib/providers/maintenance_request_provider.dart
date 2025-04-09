@@ -15,7 +15,6 @@ class MaintenanceRequestProvider extends ChangeNotifier {
   final ApiService apiService = ApiService();
   Function? updateCurrentIndexCallback;
 
-
   bool _isLoading = false;
   bool get isLoading => _isLoading;
 
@@ -55,15 +54,25 @@ class MaintenanceRequestProvider extends ChangeNotifier {
       return request?.status == 'assigned' && request?.handymanId == handymanId;
     }).toList();
   }
-  
+
   MaintenanceRequest? get inProgressRequest {
-    return _maintenanceRequestList.firstWhereOrNull((request) =>
-        request?.status == 'in_progress' && request?.handymanId == handymanId);
+    return _maintenanceRequestList.firstWhereOrNull(
+      (request) =>
+          request?.status == 'in_progress' && request?.handymanId == handymanId,
+    );
+  }
+
+  List<MaintenanceRequest?> get forApproveRequest {
+    return _maintenanceRequestList.where((request) {
+      return request?.status == 'forApprove' &&
+          request?.handymanId == handymanId;
+    }).toList();
   }
 
   List<MaintenanceRequest?> get completedRequests {
     return _maintenanceRequestList.where((request) {
-      return request?.status == 'completed' && request?.handymanId == handymanId;
+      return request?.status == 'completed' &&
+          request?.handymanId == handymanId;
     }).toList();
   }
 
@@ -106,7 +115,6 @@ class MaintenanceRequestProvider extends ChangeNotifier {
       if (response != null && response.success) {
         print("success");
         _maintenanceRequestList = response.data.maintenanceRequests;
-        // _tenant = response.data.maintenanceRequests.tenant;
         notifyListeners();
       } else {
         print("failed");
@@ -144,7 +152,6 @@ class MaintenanceRequestProvider extends ChangeNotifier {
         if (updateCurrentIndexCallback != null) {
           updateCurrentIndexCallback!(1); // Pass the index value directly
         }
-
       }
     } catch (e) {
       print("EXCEPTION $e");
@@ -152,22 +159,26 @@ class MaintenanceRequestProvider extends ChangeNotifier {
     }
   }
 
-  Future<void>startMaintenanceRequest(
-    BuildContext context, 
+  Future<void> startMaintenanceRequest(
+    BuildContext context,
     int maintenanceRequestId,
   ) async {
     _initMaintenanceRequestDetails(context);
     print(
       "from startMaintenanceRequest().maintenenceRequestId: $maintenanceRequestId",
     );
-    
+
     if (token == null || userId == null || handymanId == null) {
       print("no token detected at fetchHandyMan");
       return;
     }
 
     try {
-      final response = await apiService.patchMaintenanceRequestToStatusInProgress(token: token, maintenanceRequestId: maintenanceRequestId);
+      final response = await apiService
+          .patchMaintenanceRequestToStatusInProgress(
+            token: token,
+            maintenanceRequestId: maintenanceRequestId,
+          );
       if (response != null && response.success) {
         await fetchMaintenanceRequest(context);
         Navigator.pop(context);
@@ -185,10 +196,10 @@ class MaintenanceRequestProvider extends ChangeNotifier {
     }
   }
 
-  Future<void>completeMaintenanceRequest(
-    BuildContext context, 
+  Future<void> forApproveMaintenanceRequest(
+    BuildContext context,
     int maintenanceRequestId,
-  ) async{
+  ) async {
     _initMaintenanceRequestDetails(context);
     print(
       "from completeMaintenanceRequest().maintenenceRequestId: $maintenanceRequestId",
@@ -200,7 +211,10 @@ class MaintenanceRequestProvider extends ChangeNotifier {
     }
 
     try {
-      final response = await apiService.patchMaintenanceRequestToStatusComplete(token: token, maintenanceRequestId: maintenanceRequestId);
+      final response = await apiService.patchMaintenanceRequestToForApprove(
+        token: token,
+        maintenanceRequestId: maintenanceRequestId,
+      );
 
       if (response != null && response.success) {
         await fetchMaintenanceRequest(context);
@@ -210,7 +224,6 @@ class MaintenanceRequestProvider extends ChangeNotifier {
         }
       } else {
         print("failed request completeMaintenanceRequest");
-
       }
     } catch (e) {
       print("EXCEPTION $e");

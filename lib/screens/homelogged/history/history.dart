@@ -1,5 +1,6 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
 
 import '../../../models/maintenance_request_model.dart';
@@ -14,6 +15,16 @@ class HistoryScreen extends StatefulWidget {
 }
 
 class HistoryScreenState extends State<HistoryScreen> {
+  String formatDateTime(String? dateString) {
+    if (dateString == null) return 'Not yet assigned';
+    try {
+      DateTime date = DateTime.parse(dateString);
+      return DateFormat('MMM dd, yyyy hh:mm a').format(date);
+    } catch (e) {
+      return dateString; // fallback if error
+    }
+  }
+
   @override
   void initState() {
     super.initState();
@@ -38,7 +49,8 @@ class HistoryScreenState extends State<HistoryScreen> {
   Widget _buildMaintenanceCompletedRequest(BuildContext context) {
     return Consumer<MaintenanceRequestProvider>(
       builder: (context, maintenanceRequestProvider, child) {
-        final maintenanceRequests = maintenanceRequestProvider.completedRequests;
+        final maintenanceRequests =
+            maintenanceRequestProvider.completedRequests;
 
         // If data is loading
         if (maintenanceRequestProvider.isLoading) {
@@ -47,7 +59,7 @@ class HistoryScreenState extends State<HistoryScreen> {
 
         // If no assigned requests
         if (maintenanceRequests.isEmpty) {
-          return Center(child: Text("No Assigned requests"));
+          return Center(child: Text("No requests"));
         }
 
         return ListView.builder(
@@ -118,7 +130,11 @@ class HistoryScreenState extends State<HistoryScreen> {
     String requestTitle = request.title;
     String requestProblem = request.description;
     String assignedBy = request.assignedBy?.name;
-    // String assignedAt = request.assignedAt.
+    String assignedAt = request.assignedAt;
+    String assistedAt = request.assistedAt;
+    String approvedBy = request.approvedBy?.name;
+    String approvedAt = request.approvedAt;
+    String completedAt = request.completedAt;
     // String requestImage = request.images.toString();
     List<String> requestImages =
         request.images is List<String> ? List<String>.from(request.images) : [];
@@ -183,7 +199,26 @@ class HistoryScreenState extends State<HistoryScreen> {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       _buildDetailRow("Assigned By:", assignedBy),
-                      // _buildDetailRow("assigned At:", AssignedAt),
+                      _buildDetailRow(
+                        "Assigned At:",
+                        formatDateTime(assignedAt),
+                      ),
+                      _buildDetailRow(
+                        "Assisted At:",
+                        formatDateTime(assistedAt),
+                      ),
+                      _buildDetailRow(
+                        "Completed At:",
+                        formatDateTime(completedAt),
+                      ),
+                      _buildDetailRow(
+                        "Approved By:",
+                        formatDateTime(approvedBy),
+                      ),
+                      _buildDetailRow(
+                        "Approved At:",
+                        formatDateTime(approvedAt),
+                      ),
                       Divider(),
                       _buildDetailRow("Request ID:", requestid.toString()),
                       _buildDetailRow("Request Code:", requestCode),
@@ -237,18 +272,13 @@ class HistoryScreenState extends State<HistoryScreen> {
       child: Row(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-           Text(
+          Text(
             label,
             style: TextStyle(fontWeight: FontWeight.bold),
             softWrap: true,
           ),
           SizedBox(width: 8),
-          Expanded( 
-            child: Text(
-              value,
-              softWrap: true,
-            ),
-          ),
+          Expanded(child: Text(value, softWrap: true)),
         ],
       ),
     );
