@@ -124,7 +124,11 @@ class _ForApproveScreenState extends State<ForApproveScreen> {
     String tenantPhoneNumber = tenantProfile.phoneNumber;
     String requestTitle = request.title;
     String requestProblem = request.description;
-    // String requestImage = request.images.toString();
+    String assignedBy = request.assignedBy?.name;
+    String assignedAt = request.assignedAt;
+    String assistedAt = request.assistedAt;
+    String completedAt = request.completedAt;
+
     List<String> requestImages =
         request.images is List<String> ? List<String>.from(request.images) : [];
     String requestImage = requestImages.isNotEmpty ? requestImages.first : '';
@@ -187,6 +191,20 @@ class _ForApproveScreenState extends State<ForApproveScreen> {
                     mainAxisSize: MainAxisSize.min,
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
+                      _buildDetailRow("assigned By:", assignedBy),
+                      _buildDetailRow(
+                        "assigned At:",
+                        formatDateTime(assignedAt),
+                      ),
+                      _buildDetailRow(
+                        "Assisted At",
+                        formatDateTime(assistedAt),
+                      ),
+                      _buildDetailRow(
+                        "Completed At:",
+                        formatDateTime(completedAt),
+                      ),
+                      Divider(),
                       _buildDetailRow("Request ID:", requestid.toString()),
                       _buildDetailRow("Request Code:", requestCode),
                       _buildDetailRow("Room:", roomCode),
