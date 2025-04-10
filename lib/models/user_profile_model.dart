@@ -11,7 +11,7 @@ class UserProfile {
   final String? nationalId;
   final String? passportNumber;
   final String? socialSecurityNumber;
-  final int steps;
+  // final int steps;
   final String createdAt;
   final String updatedAt;
   final User user;
@@ -27,7 +27,7 @@ class UserProfile {
     this.nationalId,
     this.passportNumber,
     this.socialSecurityNumber,
-    required this.steps,
+    // required this.steps,
     required this.createdAt,
     required this.updatedAt,
     required this.user,
@@ -45,7 +45,7 @@ class UserProfile {
       nationalId: json['national_id'],
       passportNumber: json['passport_number'],
       socialSecurityNumber: json['social_security_number'],
-      steps: json['steps'],
+      // steps: json['steps'],
       createdAt: json['created_at'],
       updatedAt: json['updated_at'],
       user: User.fromJson(json['user']),
