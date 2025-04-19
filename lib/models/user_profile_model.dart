@@ -12,6 +12,7 @@ class UserProfile {
   final String? passportNumber;
   final String? socialSecurityNumber;
   final int? steps;
+  // final int steps;
   final String createdAt;
   final String updatedAt;
   final User user;
@@ -46,6 +47,7 @@ class UserProfile {
       passportNumber: json['passport_number'],
       socialSecurityNumber: json['social_security_number'],
       steps: json['steps'] ?? 0,
+      // steps: json['steps'],
       createdAt: json['created_at'],
       updatedAt: json['updated_at'],
       user: User.fromJson(json['user']),
