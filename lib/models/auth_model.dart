@@ -20,11 +20,7 @@ class AuthResponse {
 
   // Method to convert the object to JSON
   Map<String, dynamic> toJson() {
-    return {
-      'success': success,
-      'message': message,
-      'data': data.toJson(),
-    };
+    return {'success': success, 'message': message, 'data': data.toJson()};
   }
 }
 
@@ -32,25 +28,16 @@ class AuthData {
   String token;
   User user;
 
-  AuthData({
-    required this.token,
-    required this.user,
-  });
+  AuthData({required this.token, required this.user});
 
   // Factory constructor to create an instance from JSON
   factory AuthData.fromJson(Map<String, dynamic> json) {
-    return AuthData(
-      token: json['token'],
-      user: User.fromJson(json['user']),
-    );
+    return AuthData(token: json['token'], user: User.fromJson(json['user']));
   }
 
   // Method to convert the object to JSON
   Map<String, dynamic> toJson() {
-    return {
-      'token': token,
-      'user': user.toJson(),
-    };
+    return {'token': token, 'user': user.toJson()};
   }
 }
 
@@ -60,6 +47,7 @@ class User {
   String email;
   String? emailVerifiedAt;
   String role;
+  String? steps;
   String createdAt;
   String updatedAt;
 
@@ -69,6 +57,7 @@ class User {
     required this.email,
     this.emailVerifiedAt,
     required this.role,
+    this.steps,
     required this.createdAt,
     required this.updatedAt,
   });
@@ -81,6 +70,8 @@ class User {
       email: json['email'],
       emailVerifiedAt: json['email_verified_at'],
       role: json['role'],
+      steps: json['steps'] ?? '',
+      // steps: json['steps'] != null ? int.tryParse(json['steps']) : null,
       createdAt: json['created_at'],
       updatedAt: json['updated_at'],
     );

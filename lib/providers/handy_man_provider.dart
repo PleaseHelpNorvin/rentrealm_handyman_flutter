@@ -48,7 +48,7 @@ class HandyManProvider extends ChangeNotifier {
         print("response fails");
       }
     } catch (e) {
-      print("EXCEPTION: $e");
+      print("fetch handyman EXCEPTION: $e");
       return;
     }
   }

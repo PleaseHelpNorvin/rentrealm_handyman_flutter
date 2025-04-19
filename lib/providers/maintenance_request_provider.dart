@@ -120,7 +120,7 @@ class MaintenanceRequestProvider extends ChangeNotifier {
         print("failed");
       }
     } catch (e) {
-      print("EXCEPTION: $e");
+      print("fetch maintenance EXCEPTION: $e");
       return;
     }
   }

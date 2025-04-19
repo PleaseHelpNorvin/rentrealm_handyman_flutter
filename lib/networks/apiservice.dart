@@ -101,7 +101,7 @@ class ApiService {
         return null;
       }
     } catch (e) {
-      print("EXCEPTION $e");
+      print("getHandyMan EXCEPTION $e");
       return null;
     }
   }
@@ -119,15 +119,32 @@ class ApiService {
       "Accept": "application/json",
       "Authorization": "Bearer $token",
     };
+
     try {
       final response = await http.get(url, headers: headers);
 
+      print("RAW BODY LENGTH: ${response.body.length}");
+      print("RAW RESPONSE BODY:\n${response.body}");
+
       if (response.statusCode == 200 || response.statusCode == 201) {
         final Map<String, dynamic> responseData = jsonDecode(response.body);
-        // print(
-        //   "responseData from getMaintenanceRequest() Call: ${jsonEncode(responseData)}",
+
+        print(
+          "-------------------------------------------------------------------------------------",
+        );
+        // debugPrint(jsonEncode(responseData), wrapWidth: 4096);
+        debugPrint(
+          "getMaintenanceRequest Decoded JSON:\n${jsonEncode(responseData)}",
+          wrapWidth: 2048,
+        );
+        print(
+          "-------------------------------------------------------------------------------------",
+        );
+
+        // debugPrint(
+        //   "Decoded JSON:\n${jsonEncode(responseData)}",
+        //   wrapWidth: 2048,
         // );
-        debugPrint(jsonEncode(responseData), wrapWidth: 2048);
 
         return MaintenanceRequestResponse.fromJson(responseData);
       } else {
@@ -135,7 +152,7 @@ class ApiService {
         return null;
       }
     } catch (e) {
-      print("EXCEPTION $e");
+      print("getMaintenanceRequest EXCEPTION $e");
       return null;
     }
   }
@@ -179,7 +196,7 @@ class ApiService {
         return null;
       }
     } catch (e) {
-      print("EXCEPTION: $e");
+      print("patchMaintenanceRequestToStatusRequest EXCEPTION: $e");
       return null;
     }
   }
@@ -224,7 +241,7 @@ class ApiService {
         return null;
       }
     } catch (e) {
-      print("EXCEPTION: $e");
+      print("patchMaintenanceRequestToStatusInProgress EXCEPTION: $e");
       return null;
     }
   }
@@ -253,10 +270,16 @@ class ApiService {
 
       if (response.statusCode == 200 || response.statusCode == 201) {
         final Map<String, dynamic> responseData = jsonDecode(response.body);
+        // print(
+        //   "responseData from patchMaintenanceRequestToStatusComplete() Call: ${jsonEncode(responseData)}",
+        // );
         print(
-          "responseData from patchMaintenanceRequestToStatusComplete() Call: ${jsonEncode(responseData)}",
+          "-------------------------------------------------------------------------------------",
         );
-        // debugPrint(jsonEncode(responseData), wrapWidth: 2048);
+        debugPrint(jsonEncode(responseData), wrapWidth: 4096);
+        print(
+          "-------------------------------------------------------------------------------------",
+        );
 
         return MaintenanceRequestResponse.fromJson(responseData);
       } else {
@@ -264,7 +287,7 @@ class ApiService {
         return null;
       }
     } catch (e) {
-      print("EXCEPTION: $e");
+      print("patchMaintenanceRequestToForApprove EXCEPTION: $e");
       return null;
     }
   }
