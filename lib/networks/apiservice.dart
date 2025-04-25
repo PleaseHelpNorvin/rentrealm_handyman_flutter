@@ -45,33 +45,6 @@ class ApiService {
     }
   }
 
-  // Future<HandyManResponse?> getHandyMan({required String? token}) async {
-  //   print("from getHandyManFetch() token: $token");
-
-  //   final url = Uri.parse("$rest/handyman/handy_man/index");
-  //   final headers = {
-  //     "Content-Type": "application/json",
-  //     "Accept": "application/json",
-  //     "Authorization": "Bearer $token",
-  //   };
-
-  //   try {
-  //     final response = await http.get(url, headers: headers);
-
-  //     if (response.statusCode == 200 || response.statusCode == 201) {
-  //       final Map<String, dynamic> responseData = jsonDecode(response.body);
-  //       print("responseData from getHandyMan() Call: $responseData");
-  //       return HandyManResponse.fromJson(responseData);
-  //     } else {
-  //       print('Error: ${response.statusCode} - ${response.body}');
-  //       return null;
-  //     }
-  //   } catch (e) {
-  //     print("EXCEPTION $e");
-  //     return null;
-  //   }
-  // }
-
   Future<HandyManResponse?> getHandyMan({
     required String? token,
     required int? userId,
@@ -127,26 +100,26 @@ class ApiService {
       print("RAW RESPONSE BODY:\n${response.body}");
 
       if (response.statusCode == 200 || response.statusCode == 201) {
-        final Map<String, dynamic> responseData = jsonDecode(response.body);
+        // Check if the response body is not null and is not empty
+        if (response.body.isNotEmpty) {
+          final Map<String, dynamic> responseData = jsonDecode(response.body);
 
-        print(
-          "-------------------------------------------------------------------------------------",
-        );
-        // debugPrint(jsonEncode(responseData), wrapWidth: 4096);
-        debugPrint(
-          "getMaintenanceRequest Decoded JSON:\n${jsonEncode(responseData)}",
-          wrapWidth: 2048,
-        );
-        print(
-          "-------------------------------------------------------------------------------------",
-        );
+          print(
+            "-------------------------------------------------------------------------------------",
+          );
+          debugPrint(
+            "getMaintenanceRequest Decoded JSON:\n${jsonEncode(responseData)}",
+            wrapWidth: 4096,
+          );
+          print(
+            "-------------------------------------------------------------------------------------",
+          );
 
-        // debugPrint(
-        //   "Decoded JSON:\n${jsonEncode(responseData)}",
-        //   wrapWidth: 2048,
-        // );
-
-        return MaintenanceRequestResponse.fromJson(responseData);
+          return MaintenanceRequestResponse.fromJson(responseData);
+        } else {
+          print("Error: Empty response body");
+          return null;
+        }
       } else {
         print('Error: ${response.statusCode} - ${response.body}');
         return null;

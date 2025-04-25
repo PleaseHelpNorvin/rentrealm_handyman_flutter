@@ -19,7 +19,6 @@ class Room {
   final String createdAt;
   final String updatedAt;
   final Property? property;
-  
 
   Room({
     required this.id,
@@ -70,7 +69,8 @@ class Room {
       unitType: json['unit_type'],
       createdAt: json['created_at'],
       updatedAt: json['updated_at'],
-      property: json['property'] != null ? Property.fromJson(json['property']) : null,
+      property:
+          json['property'] != null ? Property.fromJson(json['property']) : null,
     );
   }
 }

@@ -1,4 +1,3 @@
-
 import 'dart:io';
 import 'package:provider/provider.dart';
 import 'package:flutter/material.dart';
@@ -14,11 +13,12 @@ import 'screens/homelogged/home/home.dart';
 import 'screens/homelogged/requested_maintenance_list/requested_maintenance.dart';
 import 'screens/homelogged/todo/todo_screen.dart';
 
-class MyHttpOverrides extends HttpOverrides{
+class MyHttpOverrides extends HttpOverrides {
   @override
   HttpClient createHttpClient(SecurityContext? context) {
     return super.createHttpClient(context)
-    ..badCertificateCallback = (X509Certificate cert, String host, int port) => true;
+      ..badCertificateCallback =
+          (X509Certificate cert, String host, int port) => true;
   }
 }
 
@@ -37,7 +37,7 @@ class MyApp extends StatefulWidget {
 class _MyAppState extends State<MyApp> {
   @override
   Widget build(BuildContext context) {
-    return MultiProvider (
+    return MultiProvider(
       providers: [
         ChangeNotifierProvider(create: (_) => AuthProvider()),
         ChangeNotifierProvider(create: (_) => HandyManProvider()),
@@ -46,12 +46,12 @@ class _MyAppState extends State<MyApp> {
       child: Builder(
         builder: (context) {
           return MaterialApp(
-            title: 'Rent Realm: HandyMan',  
+            title: 'Rent Realm: HandyMan',
             theme: ThemeData(
+              scaffoldBackgroundColor:
+                  Colors.white, // or any other color you prefer
               useMaterial3: true,
-              colorScheme: ColorScheme.fromSeed(
-                seedColor: Colors.blue
-              ),
+              colorScheme: ColorScheme.fromSeed(seedColor: Colors.blue),
               appBarTheme: const AppBarTheme(
                 backgroundColor: Colors.blue, // sets AppBar background color
                 foregroundColor: Colors.white, // sets text & icon color
@@ -66,44 +66,29 @@ class _MyAppState extends State<MyApp> {
                   shape: RoundedRectangleBorder(
                     borderRadius: BorderRadius.circular(12),
                   ),
-                  textStyle: const TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
+                  textStyle: const TextStyle(
+                    fontSize: 16,
+                    fontWeight: FontWeight.bold,
+                  ),
                 ),
               ),
-              //for 50% width for button 
-                // FractionallySizedBox(
-                //   widthFactor: 0.5, // 50% width
-                //   child: ElevatedButton(
-                //     onPressed: () {},
-                //     child: Text('Half Width'),
-                //   ),
-                // ),
-
-              // for double.infinity elevatedButton
-                // SizedBox(
-                //   width: double.infinity,
-                //   child: ElevatedButton(
-                //     onPressed: () {},
-                //     child: Text('Full Width'),
-                //   ),
-                // ),
-
             ),
-            darkTheme: ThemeData.dark(),
+            // darkTheme: ThemeData.dark(),
             home: const GetStartedScreen(),
             routes: {
-              '/get_started' : (context) => GetStartedScreen(),
+              '/get_started': (context) => GetStartedScreen(),
               '/login': (context) => LoginScreen(),
               '/home': (context) => const HomeScreen(),
-              '/requestedMaintenance': (context) => const RequestedMaintenanceScreen(),
-              '/assignedMaintenance': (context) => const AssignedMaintenanceScreen(),
+              '/requestedMaintenance':
+                  (context) => const RequestedMaintenanceScreen(),
+              '/assignedMaintenance':
+                  (context) => const AssignedMaintenanceScreen(),
               '/todo': (context) => const TodoScreen(),
               '/history': (context) => const HistoryScreen(),
-
             },
           );
-        } 
+        },
       ),
     );
   }
 }
-

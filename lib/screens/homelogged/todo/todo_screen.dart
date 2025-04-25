@@ -66,7 +66,7 @@ class _TodoScreenState extends State<TodoScreen> {
     String requestImage = requestImages.isNotEmpty ? requestImages.first : '';
     print("request Image: $requestImage");
     String address =
-        "${inProgressRequest?.room?.property?.address.line1 ?? "Unknown line1"}, ${inProgressRequest?.room?.property?.address.line2 ?? "Unknown line2"}, ${inProgressRequest?.room?.property?.address.province ?? "Unknown provice"}, ${inProgressRequest?.room?.property?.address.postalCode ?? "Unknown postalCode"} ";
+        "${inProgressRequest?.room?.property?.address?.line1 ?? "Unknown line1"}, ${inProgressRequest?.room?.property?.address?.line2 ?? "Unknown line2"}, ${inProgressRequest?.room?.property?.address?.province ?? "Unknown provice"}, ${inProgressRequest?.room?.property?.address?.postalCode ?? "Unknown postalCode"} ";
     return Scaffold(
       body: Padding(
         padding: EdgeInsets.all(16.0), // Increased padding for better spacing

@@ -1,4 +1,3 @@
-// import 'dart:convert';
 import 'address_model.dart';
 
 class Property {
@@ -10,7 +9,7 @@ class Property {
   final String status;
   final DateTime createdAt;
   final DateTime updatedAt;
-  final Address address;
+  final Address? address; // Nullable address
 
   Property({
     required this.id,
@@ -21,7 +20,7 @@ class Property {
     required this.status,
     required this.createdAt,
     required this.updatedAt,
-    required this.address,
+    this.address, // Nullable constructor
   });
 
   factory Property.fromJson(Map<String, dynamic> json) {
@@ -34,7 +33,10 @@ class Property {
       status: json['status'],
       createdAt: DateTime.parse(json['created_at']),
       updatedAt: DateTime.parse(json['updated_at']),
-      address: Address.fromJson(json['address']),
+      address:
+          json['address'] != null
+              ? Address.fromJson(json['address'])
+              : null, // Handle null address
     );
   }
 
@@ -48,8 +50,7 @@ class Property {
       'status': status,
       'created_at': createdAt.toIso8601String(),
       'updated_at': updatedAt.toIso8601String(),
-      'address': address.toJson(),
+      'address': address?.toJson(), // Safely handle null address
     };
   }
 }
-
